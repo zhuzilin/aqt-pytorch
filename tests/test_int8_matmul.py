@@ -8,9 +8,9 @@ def print_diff(name, a, b):
     print(f"  mean diff: {(a - b).abs().mean()}")
 
 
-def test_int8_matmul(dtype=torch.bfloat16, device='cuda'):
+def test_int8_matmul(dtype=torch.bfloat16, device="cuda"):
     a1 = torch.randn(64, 128, dtype=dtype, device=device)
-    b1 = torch.randn(128, 64, dtype=dtype, device=device)
+    b1 = torch.randn(128, 256, dtype=dtype, device=device)
     a1.requires_grad = True
     b1.requires_grad = True
 
@@ -19,7 +19,7 @@ def test_int8_matmul(dtype=torch.bfloat16, device='cuda'):
 
     qout = int8_matmul(a1, b1)
     qout.sum().backward()
-    
+
     out = torch.matmul(a2, b2)
     out.sum().backward()
 
@@ -28,5 +28,5 @@ def test_int8_matmul(dtype=torch.bfloat16, device='cuda'):
     print_diff("b.grad", b1.grad, b2.grad)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_int8_matmul()
